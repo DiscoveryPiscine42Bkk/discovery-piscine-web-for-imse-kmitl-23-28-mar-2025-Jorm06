@@ -20,9 +20,13 @@ $(document).ready(function() {
         }
     }
       
-    if (!Cookies.get(FirstKey)) {
-       
-        Cookies.set(FirstKey, true);       
+    if (Cookies.get(FirstKey)) {
+        Object.keys(Cookies.get()).forEach(key => {
+            if (key !== FirstKey) {
+                Cookies.remove(key);
+            }
+        });
+        Cookies.set(FirstKey, "true", { expires: 1 });
     } else {
         
         Object.keys(Cookies.get()).forEach(function(key) {
