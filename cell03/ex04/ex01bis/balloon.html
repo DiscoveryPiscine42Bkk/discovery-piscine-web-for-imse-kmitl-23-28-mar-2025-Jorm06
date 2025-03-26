@@ -4,71 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balloon</title>
-    <link rel="stylesheet" href="balloon.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-       body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 50px;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
         }
-
         #balloon {
-    width: 200px;
-    height: 200px;
-    background-color: red;
-    border-radius: 50%;
-    display: inline-block;
-    transition: all 0.3s ease;
-    cursor: pointer;
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
- 
     </style>
 </head>
 <body>
-
-
     <h2>Click the balloon to grow</h2>
     <div id="balloon"></div>
 
-    <script >
-        $(document).ready(function() {
-    const $balloon = $("#balloon");
-    
-    let size = 200;  
-    const maxSize = 420;  
-    const minSize = 200;  
-    const colors = ["red", "green", "blue"]; 
-    let colorIndex = 0;  
+    <script>
+        $(function() {
+            const $balloon = $("#balloon");
+            const settings = {
+                minSize: 200,
+                maxSize: 420,
+                sizeStep: 10,
+                shrinkStep: 5,
+                colors: ["red", "green", "blue"]
+            };
+            
+            let state = {
+                size: settings.minSize,
+                colorIndex: 0
+            };
 
-    $balloon.on("click", function() {
-        if (size >= maxSize) {
-            size = minSize;  
-        } else {
-            size += 10;
-        }
+            $balloon.on("click", function() {
+                if (state.size >= settings.maxSize) {
+                    
+                    state.size = settings.minSize;
+                    state.colorIndex = 0; 
+                } else {
+                    state.size += settings.sizeStep;
+                    state.colorIndex = (state.colorIndex + 1) % settings.colors.length;
+                }
+                updateBalloon();
+            });
 
-        colorIndex = (colorIndex + 1) % colors.length;
-        $balloon.css({
-            width: size + "px",
-            height: size + "px",
-            backgroundColor: colors[colorIndex]
+           
+            $balloon.on("mouseleave", function() {
+                if (state.size > settings.minSize) {
+                    state.size -= settings.shrinkStep;
+                    state.colorIndex = (state.colorIndex - 1 + settings.colors.length) % settings.colors.length;
+                    updateBalloon();
+                }
+            });
+
+           
+            function updateBalloon() {
+                $balloon.css({
+                    width: state.size + "px",
+                    height: state.size + "px",
+                    backgroundColor: settings.colors[state.colorIndex]
+                });
+            }
         });
-    });
-
-    $balloon.on("mouseleave", function() {
-        if (size > minSize) {
-            size -= 5;
-            colorIndex = (colorIndex - 1 + colors.length) % colors.length;
-        }
-
-        $balloon.css({
-            width: size + "px",
-            height: size + "px",
-            backgroundColor: colors[colorIndex]
-        });
-    });
-});
     </script>
 </body>
 </html>

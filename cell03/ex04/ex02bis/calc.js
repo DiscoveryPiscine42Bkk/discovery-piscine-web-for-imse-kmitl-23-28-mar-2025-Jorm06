@@ -57,6 +57,6 @@ $(document).ready(function() {
     });
     
     function isPositiveInteger(value) {
-        return /^\d+$/.test(value) && parseInt(value) >= 0;
+        return /^\d+$/.test(value) && parseInt(value) >= 0; // จุดเทสอธิบาย
     }
 });
