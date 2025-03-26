@@ -4,13 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balloon</title>
-    <link rel="stylesheet" href="balloon.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+#balloon {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    </style>
 </head>
 <body>
 
     <h2>Click the balloon to grow</h2>
     <div id="balloon"></div>
 
-    <script src="balloon.js"></script>
+    <script>
+        const balloon = document.getElementById("balloon");
+
+let size = 200;  
+const maxSize = 420;  
+const minSize = 200;  
+const colors = ["red", "green", "blue"]; 
+let colorIndex = 0;  
+
+
+balloon.addEventListener("click", () => {
+    if (size >= maxSize) {
+        size = minSize;  
+    } else {
+        size += 10;
+    }
+
+    colorIndex = (colorIndex + 1) % colors.length;
+    balloon.style.width = size + "px";
+    balloon.style.height = size + "px";
+    balloon.style.backgroundColor = colors[colorIndex];
+});
+
+
+balloon.addEventListener("mouseleave", () => {
+    if (size > minSize) {
+        size -= 5;
+        colorIndex = (colorIndex - 1 + colors.length) % colors.length;
+    }
+
+    balloon.style.width = size + "px";
+    balloon.style.height = size + "px";
+    balloon.style.backgroundColor = colors[colorIndex];
+});
+
+    </script>
 </body>
 </html>
