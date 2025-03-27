@@ -1,40 +1,40 @@
 $(document).ready(function() {
     const $ft_list = $("#ft_list");
-    const FirstKey = "FirstOpen";
+    const name = "mycookie";
    
     function createTodo() {
-        const txt = prompt("Please Enter TODO LIST :");
+        const txt = prompt("Please Enter TODO LIST :");      
         if (txt) {
-            const name = new Date().getTime();
-            
-            Cookies.set(name, txt);
-            
+            const cookie = Cookies.get(name);
+            let values;
+            if(cookie) {
+                values = JSON.parse(cookie);
+            } else {
+                values = [];
+            }
+            values.push(txt);
+            Cookies.set(name, JSON.stringify(values));
             const $node = $("<div>").text(txt).click(function() {
-                if (confirm("Do you want to delete")) {
+                if (confirm("Do you want to delete?")) {
                     $(this).remove();
                     Cookies.remove(name);
+                    
                 }
             });
-            
             $ft_list.prepend($node);
         }
     }
-      
-    if (Cookies.get(FirstKey)) {
-        Object.keys(Cookies.get()).forEach(key => {
-            if (key !== FirstKey) {
-                Cookies.remove(key);
-            }
-        });
-        Cookies.set(FirstKey, "true", { expires: 1 });
-    } else {
-        
-        Object.keys(Cookies.get()).forEach(function(key) {
-            if (key !== FirstKey) {
-                const $node = $("<div>").text(Cookies.get(key)).click(function() {
+
+    if (Cookies.get(name)) {
+        const cookie = Cookies.get(name);
+        values = JSON.parse(cookie)
+        values.forEach(function(val) {
+            if (val) {
+                const $node = $("<div>").text(val).click(function() {
                     if (confirm("Do you want to delete?")) {
                         $(this).remove();
-                        Cookies.remove(key);
+                        Cookies.remove(val);
+                        
                     }
                 });
                 $ft_list.prepend($node);
